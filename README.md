@@ -1,6 +1,6 @@
 # Flask Portfolio Starter
 
-Use this project to create a Flask Servr.
+I'm sad
 
 Runtime link: <https://flask.nighthawkcodingsociety.com/>
 GitHub link: https://github.com/nighthawkcoders/flask_portfolio

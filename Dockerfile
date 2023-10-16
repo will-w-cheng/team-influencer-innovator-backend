@@ -12,6 +12,6 @@ RUN pip install gunicorn
 
 ENV GUNICORN_CMD_ARGS="--workers=1 --bind=0.0.0.0:8444"
 
-EXPOSE 8086
+EXPOSE 8444
 
 CMD [ "gunicorn", "main:app" ]

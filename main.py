@@ -8,7 +8,7 @@ from __init__ import app,db  # Definitions initialization
 from model.jokes import initJokes
 from model.users import initUsers
 from model.players import initPlayers
-
+from model.locations import init_locations
 
 # setup APIs
 from api.covid import covid_api # Blueprint import api definition
@@ -50,6 +50,8 @@ def activate_job():  # activate these items
     initJokes()
     initUsers()
     initPlayers()
+
+
 
 # this runs the application on the development server
 if __name__ == "__main__":

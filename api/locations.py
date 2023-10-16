@@ -1,51 +1,80 @@
-import json
-from flask import Blueprint, request, jsonify
-from flask_restful import Api, Resource # used for REST API building
-from datetime import datetime
+from flask import Blueprint, request
+from flask_restful import Api, Resource, reqparse
+from __init__ import db  # Import your db instance from __init__.py
+from model.locations import Location  # Import the Location model
 
-from model.users import User
+# Create the Flask app instance
+# app = Flask(__name__)
 
-locations_api = Blueprint('location_api', __name__, url_prefix='/api/locations')
-api = Api(locations_api)
+# Initialize the SQLAlchemy extension
+# db.init_app(app)
 
+# Create a Blueprint for the location API
+location_api = Blueprint('location_api', __name__, url_prefix='/api/locations')
 
-class LocationAPI:
-    class _CRUD(Resource):
-        def post(self):
-            ''' Create a new location and place '''
-            body = request.get_json()
-            location_name = body.get('location_name')
-            image = body.get('image')
+# Create the API instance
+api = Api(location_api)
 
-            # Validate location_name and image fields
-            if location_name is None or len(location_name) < 2:
-                return {'message': 'Location name is missing or too short'}, 400
+class LocationAPI(Resource):
+    def get(self):
+        id = request.args.get("id")
+        location = db.session.query(Location).get(id)
+        if location:
+            return location.to_dict()
+        return {"message": "Location not found"}, 404
 
-            if image is None:
-                return {'message': 'Image is missing'}, 400
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("location_name", required=True, type=str)
+        parser.add_argument("image", required=True, type=str)
+        args = parser.parse_args()
+        location = Location(args["location_name"], args["image"])
 
-            # Create a new location record
-            new_location = Location(location_name=location_name, image=image)
-            location = new_location.create()
+        try:
+            db.session.add(location)
+            db.session.commit()
+            return location.to_dict(), 201
+        except Exception as exception:
+            db.session.rollback()
+            return {"message": f"Error: {exception}"}, 500
 
+    def put(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("id", required=True, type=int)
+        parser.add_argument("location_name", type=str)
+        parser.add_argument("image", type=str)
+        args = parser.parse_args()
+        
+        try:
+            location = db.session.query(Location).get(args["id"])
             if location:
-                return jsonify(location.read())
+                if args["location_name"] is not None:
+                    location.location_name = args["location_name"]
+                if args["image"] is not None:
+                    location.image = args["image"]
+                db.session.commit()
+                return location.to_dict(), 200
             else:
-                return {'message': 'Error creating location'}, 400
+                return {"message": "Location not found"}, 404
+        except Exception as exception:
+            db.session.rollback()
+            return {"message": f"Error: {exception}"}, 500
+    
+    def delete(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("id", required=True, type=int)
+        args = parser.parse_args()
 
-        def get(self):
-            ''' Retrieve a list of all locations and places '''
-            locations = Location.query.all()
-            json_ready = [location.read() for location in locations]
-            return jsonify(json_ready)
-        
-        
-if __name__ == "__main__":
-    from flask import Flask
-    app = Flask(__name)
+        try:
+            location = db.session.query(Location).get(args["id"])
+            if location:
+                db.session.delete(location)
+                db.session.commit()
+                return location.to_dict()
+            else:
+                return {"message": "Location not found"}, 404
+        except Exception as exception:
+            db.session.rollback()
+            return {"message": f"Error: {exception}"}, 500
 
-    # Register the locations API blueprint
-    app.register_blueprint(locations_api)
-
-    # Run the Flask app
-    app.run(debug=True)
+api.add_resource(LocationAPI, "/api/locations")

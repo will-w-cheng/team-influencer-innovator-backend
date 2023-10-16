@@ -1,13 +1,7 @@
-from flask import Blueprint, request
+from flask import Blueprint, jsonify
 from flask_restful import Api, Resource, reqparse
-from __init__ import db  # Import your db instance from __init__.py
-from model.locations import Location  # Import the Location model
-
-# Create the Flask app instance
-# app = Flask(__name__)
-
-# Initialize the SQLAlchemy extension
-# db.init_app(app)
+from __init__ import db
+from model.locations import Location
 
 # Create a Blueprint for the location API
 location_api = Blueprint('location_api', __name__, url_prefix='/api/locations')
@@ -17,11 +11,14 @@ api = Api(location_api)
 
 class LocationAPI(Resource):
     def get(self):
-        id = request.args.get("id")
-        location = db.session.query(Location).get(id)
-        if location:
-            return location.to_dict()
-        return {"message": "Location not found"}, 404
+        # Retrieve all locations from the database
+        locations = Location.query.all()
+
+        # Prepare the data in JSON format
+        json_ready = [location.to_dict() for location in locations]
+
+        # Return the JSON response
+        return jsonify(json_ready)
 
     def post(self):
         parser = reqparse.RequestParser()
@@ -44,7 +41,7 @@ class LocationAPI(Resource):
         parser.add_argument("location_name", type=str)
         parser.add_argument("image", type=str)
         args = parser.parse_args()
-        
+
         try:
             location = db.session.query(Location).get(args["id"])
             if location:
@@ -59,7 +56,7 @@ class LocationAPI(Resource):
         except Exception as exception:
             db.session.rollback()
             return {"message": f"Error: {exception}"}, 500
-    
+
     def delete(self):
         parser = reqparse.RequestParser()
         parser.add_argument("id", required=True, type=int)
@@ -77,4 +74,19 @@ class LocationAPI(Resource):
             db.session.rollback()
             return {"message": f"Error: {exception}"}, 500
 
-api.add_resource(LocationAPI, "/api/locations")
+# Add the LocationAPI resource to the /api/locations endpoint
+api.add_resource(LocationAPI, "/")
+
+class LocationListAPI(Resource):
+    def get(self):
+        # Retrieve all locations from the database
+        locations = Location.query.all()
+
+        # Prepare the data in JSON format
+        json_ready = [location.to_dict() for location in locations]
+
+        # Return the JSON response
+        return jsonify(json_ready)
+
+# Add the LocationListAPI resource to the /api/locationsList endpoint
+api.add_resource(LocationListAPI, "/api/locations")

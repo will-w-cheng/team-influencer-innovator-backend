@@ -46,10 +46,13 @@ def table():
     return render_template("table.html")
 
 @app.before_first_request
-def activate_job():  # activate these items 
+def activate_job():
+    db.drop_all()  # Clear the database
+    db.create_all()  # Recreate the database schema
     initJokes()
     initUsers()
     initPlayers()
+    init_locations()
 
 
 

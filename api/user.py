@@ -44,6 +44,22 @@ class LeaderboardAPI:
             leaderboard_entries = User.query.all()
             leaderboard_data = [{'username': entry.username, 'points': entry.points} for entry in leaderboard_entries]
             return jsonify(leaderboard_data)
+        
+        def put(self):
+            ''' Update user points '''
+            body = request.get_json()
+            username = body.get('username')
+            new_points = body.get('points')
+
+            user = User.query.filter_by(username=username).first()
+            if user is None:
+                return {'message': 'User not found'}, 404
+
+            if new_points is not None:
+                user.update_points(new_points)
+                return {'message': f'Updated points for user {user.username}'}
+
+
 
     # Building REST API endpoints
     api.add_resource(_CRUD, '/')  # Create and Read operations

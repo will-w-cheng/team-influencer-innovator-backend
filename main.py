@@ -6,7 +6,7 @@ from flask import render_template  # import render_template from "public" flask 
 # import "packages" from "this" project
 from __init__ import app,db  # Definitions initialization
 from model.jokes import initJokes
-from model.users import initUsers
+from model.users import initLeaderboard
 from model.players import initPlayers
 from model.locations import init_locations
 
@@ -50,7 +50,7 @@ def activate_job():
     db.drop_all()  # Clear the database
     db.create_all()  # Recreate the database schema
     initJokes()
-    initUsers()
+    initLeaderboard()
     initPlayers()
     init_locations()
 

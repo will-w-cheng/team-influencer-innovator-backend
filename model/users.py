@@ -13,11 +13,11 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(255), unique=True, nullable=False)
-    points = db.Column(db.Integer, default=0)
+    _points = db.Column(db.Integer, default=0)  # Use _points as a private attribute
 
     def __init__(self, username, points=0):
         self.username = username
-        self.points = points
+        self._points = points  # Initialize _points attribute
 
     @property
     def points(self):
@@ -43,13 +43,13 @@ class User(db.Model):
         return {
             "id": self.id,
             "username": self.username,
-            "points": self.points
+            "points": self.points  # Use the property, not the private attribute
         }
 
     def update_points(self, points):
         """Update the points of a user in the leaderboard."""
         if points >= 0:
-            self.points = points
+            self.points = points  # Use the property, not the private attribute
             db.session.commit()
             return self
 
@@ -62,7 +62,7 @@ class User(db.Model):
 # Function to initialize the leaderboard table with sample data
 def initLeaderboard():
     with app.app_context():
-        # create the database and the leaderboard table, for now it will just be normal points and whatnot
+        # create the database and the leaderboard table
         db.create_all()
         
         users_data = [

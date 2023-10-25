@@ -1,34 +1,19 @@
 from __init__ import db
-# from flask import render_template  # import render_template from "public" flask libraries
-# app = flask(__name__)
-class Location(db.Model):
+import base64
 
-    # Ok so you basically create the new table for the database as the location
+class Location(db.Model):
     __tablename__ = "locations"
 
-    # Adding the ID field for the table name of locations
     id = db.Column(db.Integer, primary_key=True)
-
-    # Adding the location_name field to the table name of locations in the sqlite db
     location_name = db.Column(db.String, nullable=False)
-
-    # Adding the image tag which will be parse in data as a string which Saaras will input as base64
     image = db.Column(db.String, nullable=False)
 
-    # Class of init location names and images
     def __init__(self, location_name, image):
         self.location_name = location_name
         self.image = image
 
-    # Convert the the db fields into a dictionary where you can access it
     def to_dict(self):
         return {"id": self.id, "location_name": self.location_name, "image": self.image}
-
-# @app.teardown_appcontext
-# def shutdown_session(exception=None):
-#     db.session.remove()
-
-import base64
 
 def image_to_base64(image_path):
     with open(image_path, "rb") as image_file:
@@ -38,17 +23,15 @@ def image_to_base64(image_path):
         return base64_string
 
 # Example usage
-image_path = "C:\\Users\\kodal\\team-influencer-innovator-backend\\static\\assets\\IMG_0902.png"
+image_path = "static/assets/IMG_0902.png"  # Relative path to the image
 base64_data = image_to_base64(image_path)
-image_path2 = "C:\\Users\\kodal\\team-influencer-innovator-backend\\static\\assets\\IMG_0908.png"
-
-base64_data2 = image_to_base64(image_path)
-print(image_path)
+image_path2 = "static/assets/IMG_0908.png"  # Another relative path to a different image
+base64_data2 = image_to_base64(image_path2)
 
 def init_locations():
-    location1 = Location(location_name="Location 1", image="image1.jpg")
-    location2 = Location(location_name="Location 2", image="image2.jpg")
-    location3 = Location(location_name="Location 3", image="image3.jpg")
+    location1 = Location(location_name="Location 1", image=base64_data)
+    location2 = Location(location_name="Location 2", image=base64_data2)
+    location3 = Location(location_name="Location 3", image="image3.jpg")  # Placeholder for the third image
 
     db.session.add(location1)
     db.session.add(location2)
@@ -57,6 +40,4 @@ def init_locations():
     db.session.commit()
 
 if __name__ == '__main__':
-    # Initialize your database with the application context, so  that it can create it based on the things
-    with db.create_scoped_session() as session:
-        init_locations()
+    init_locations()

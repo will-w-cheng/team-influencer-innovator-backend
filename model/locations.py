@@ -28,6 +28,22 @@ class Location(db.Model):
 # def shutdown_session(exception=None):
 #     db.session.remove()
 
+import base64
+
+def image_to_base64(image_path):
+    with open(image_path, "rb") as image_file:
+        image_binary = image_file.read()
+        base64_encoded = base64.b64encode(image_binary)
+        base64_string = base64_encoded.decode("utf-8")
+        return base64_string
+
+# Example usage
+image_path = "C:\\Users\\kodal\\team-influencer-innovator-backend\\static\\assets\\IMG_0902.png"
+base64_data = image_to_base64(image_path)
+image_path2 = "C:\\Users\\kodal\\team-influencer-innovator-backend\\static\\assets\\IMG_0908.png"
+
+base64_data2 = image_to_base64(image_path)
+print(image_path)
 
 def init_locations():
     location1 = Location(location_name="Location 1", image="image1.jpg")

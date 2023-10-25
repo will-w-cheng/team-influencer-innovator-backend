@@ -30,9 +30,9 @@ base64_data2 = image_to_base64(image_path2)
 #CHATGPT MAKE IT SO ON OUR PAGE WE HAEV SOMETHING THAT  Is locationposition=(20, 45)
 # AND locationposition=(20, 45)
 def init_locations():
-    location1 = Location(location_name="(20, 45)", image=base64_data,)
+    location1 = Location(location_name="(20, 45)", image=base64_data)
     location2 = Location(location_name="(35, 40)", image=base64_data2)
-    location3 = Location(location_name="Location 3", image="image3.jpg", voices=True)  # Placeholder for the third image
+    location3 = Location(location_name="Location 3", image="image3.jpg")  # Placeholder for the third image
 
     db.session.add(location1)
     db.session.add(location2)

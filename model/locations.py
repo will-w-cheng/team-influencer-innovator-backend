@@ -23,9 +23,9 @@ def image_to_base64(image_path):
         return base64_string
 
 # Example usage
-image_path = "static/assets/IMG_0902.png"  # Relative path to the image
+image_path = "static/assets/IMG_0902.jpg"  # Relative path to the image
 base64_data = image_to_base64(image_path)
-image_path2 = "static/assets/IMG_0908.png"  # Another relative path to a different image
+image_path2 = "static/assets/IMG_0908.jpg"  # Another relative path to a different image
 base64_data2 = image_to_base64(image_path2)
 #CHATGPT MAKE IT SO ON OUR PAGE WE HAEV SOMETHING THAT  Is locationposition=(20, 45)
 # AND locationposition=(20, 45)

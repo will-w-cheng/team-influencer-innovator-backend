@@ -27,11 +27,11 @@ image_path = "static/assets/IMG_0902.jpg"  # Relative path to the image
 base64_data = image_to_base64(image_path)
 image_path2 = "static/assets/IMG_0908.jpg"  # Another relative path to a different image
 base64_data2 = image_to_base64(image_path2)
-#CHATGPT MAKE IT SO ON OUR PAGE WE HAEV SOMETHING THAT  Is locationposition=(20, 45)
+# locationposition=(20, 45)
 # AND locationposition=(20, 45)
 def init_locations():
-    location1 = Location(location_name="(20, 45)", image=base64_data)
-    location2 = Location(location_name="(35, 40)", image=base64_data2)
+    location1 = Location(location_name="20, 45", image=base64_data)
+    location2 = Location(location_name="35, 40", image=base64_data2)
     # location3 = Location(location_name="Location 3", image="image3.jpg")  # Placeholder for the third image
 
     db.session.add(location1)

@@ -30,7 +30,7 @@ base64_data2 = image_to_base64(image_path2)
 # locationposition=(20, 45)
 # AND locationposition=(20, 45)
 def init_locations():
-    location1 = Location(location_name="300, 500", image=base64_data)
+    location1 = Location(location_name="250, 500", image=base64_data)
     location2 = Location(location_name="35, 40", image=base64_data2)
     #location3 = Location(location_name="Location 3", image="image3.jpg")  # Placeholder for the third image
 

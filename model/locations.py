@@ -42,7 +42,11 @@ def init_locations():
     and then add them to a session
     '''
     count = 0
-    for filename in os.listdir(image_path):
+    filenames = [filename for filename in os.listdir(image_path) if os.path.isfile(os.path.join(image_path, filename))]
+
+    # Sort the filenames alphabetically
+    sorted_filenames = sorted(filenames)
+    for filename in sorted_filenames:
         if os.path.isfile(os.path.join(image_path, filename)):
             count += 1
             b64_lst.append(image_to_base64(image_path + filename))

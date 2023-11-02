@@ -34,7 +34,7 @@ def init_locations():
     If you want to add an image you can just put it in the static/assets/images
     But also append your coordinates to the following list below 
     '''
-    coordinates_data = ["250, 500", "100, 450"]
+    coordinates_data = ["250, 500", "100, 450", "", ""]
 
 
     '''
